@@ -4,12 +4,16 @@ import System
 public struct Source: Equatable, Hashable {
   public let name: Name
   public let path: Path
+  public init(name: Name, path: Path) {
+    self.name = name
+    self.path = path
+  }
 }
 
 // MARK: - Source.Name
 
 extension Source {
-  public struct Name: Equatable, Hashable {
+  public struct Name: Equatable, Hashable, Sendable {
     let value: String
     init(_ value: String) {
       self.value = value
@@ -53,9 +57,6 @@ extension Source.Path: ExpressibleByStringLiteral {
 extension Source {
   public struct Code: Equatable, Sendable {
     fileprivate let data: Data
-    public init(data: Data) {
-      self.data = data
-    }
   }
 }
 
@@ -66,6 +67,12 @@ extension Source.Code: CustomStringConvertible {
 extension Source.Code {
   public struct NotFound: Error, Equatable {
     public let path: Source.Path
+  }
+}
+
+extension Source.Code: ExpressibleByStringLiteral {
+  public init(stringLiteral value: StaticString) {
+    self.init(data: Data(value.withUTF8Buffer { String(decoding: $0, as: UTF8.self) }.utf8))
   }
 }
 
