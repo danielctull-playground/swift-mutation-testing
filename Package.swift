@@ -7,11 +7,25 @@ let package = Package(
   platforms: [
     .macOS(.v14),
   ],
+  products: [
+    .executable(name: "swift-mutation-testing", targets: ["MutationTesting"]),
+  ],
   dependencies: [
+    .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.6.0"),
     .package(url: "https://github.com/swiftlang/swift-subprocess.git", branch: "main"),
     .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "601.0.0"),
   ],
   targets: [
+
+    .executableTarget(
+      name: "MutationTesting",
+      dependencies: [
+        "CoreMutation",
+        "MutationKit",
+        "PackageKit",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+    ),
 
     .target(
       name: "CoreMutation",
