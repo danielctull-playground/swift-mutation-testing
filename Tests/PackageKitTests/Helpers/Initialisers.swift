@@ -18,3 +18,9 @@ extension Source {
     self.init(name: Name(name), path: Path(path))
   }
 }
+
+extension Source.Code.NotFound {
+  init(path: FilePath) {
+    self.init(path: Source.Path(path))
+  }
+}
