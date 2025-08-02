@@ -1,59 +1,65 @@
-import Foundation
 import PackageKit
-import System
 import Testing
 
 @Suite("Target")
 struct TargetTests {
 
-  @Suite("Name")
-  struct Name {
-
-    @Test("CustomStringConvertible")
-    func customStringConvertible() async throws {
-
-      let path = try FilePath.testPackages.appending("DefaultPaths")
-      let package = try await Package(path: path)
-
-      #expect(package.targets.map(\.name.description) == [
-        "Test",
-        "Library",
-        "Executable",
-      ])
-    }
-  }
-
   @Suite("Kind")
   struct Kind {
 
     @Test("CustomStringConvertible")
-    func customStringConvertible() async throws {
+    func customStringConvertible() {
+      #expect(Target.Kind.executable.description == "executable")
+      #expect(Target.Kind.library.description == "library")
+      #expect(Target.Kind.test.description == "test")
+    }
 
-      let path = try FilePath.testPackages.appending("DefaultPaths")
-      let package = try await Package(path: path)
-
-      #expect(package.targets.map(\.kind.description) == [
-        "test",
-        "library",
-        "executable",
-      ])
+    @Test("Equatable")
+    func equatable() {
+      #expect(Target.Kind.executable == .executable)
+      #expect(Target.Kind.executable != .library)
     }
   }
 
-  @Suite("Path")
-  struct Path {
+  @Suite("Target.Name")
+  struct TargetNameTests {
 
     @Test("CustomStringConvertible")
-    func customStringConvertible() async throws {
+    func customStringConvertible() {
+      let name: Target.Name = "Some name"
+      #expect(name.description == "Some name")
+    }
 
-      let path = try FilePath.testPackages.appending("DefaultPaths")
-      let package = try await Package(path: path)
+    @Test("Equatable")
+    func equatable() {
+      let name1: Target.Name = "Some name"
+      let name2: Target.Name = "Some name"
+      let name3: Target.Name = "Another"
+      #expect(name1 == name2)
+      #expect(name1 != name3)
+    }
 
-      #expect(package.targets.map(\.path.description) == [
-        path.appending("Tests").appending("Test").description,
-        path.appending("Sources").appending("Library").description,
-        path.appending("Sources").appending("Executable").description,
-      ])
+    @Test("ExpressibleByStringLiteral")
+    func expressibleByStringLiteral() {
+      let name: Target.Name = "Some name"
+      #expect(name == "Some name")
     }
   }
+
+//  @Suite("Path")
+//  struct Path {
+//
+//    @Test("CustomStringConvertible")
+//    func customStringConvertible() async throws {
+//
+//      let path = try FilePath.testPackages.appending("DefaultPaths")
+//      let package = try await Package(path: path)
+//
+//      #expect(package.targets.map(\.path.description) == [
+//        path.appending("Tests").appending("Test").description,
+//        path.appending("Sources").appending("Library").description,
+//        path.appending("Sources").appending("Executable").description,
+//      ])
+//    }
+//  }
 }

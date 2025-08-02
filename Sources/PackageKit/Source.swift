@@ -21,6 +21,12 @@ extension Source.Name: CustomStringConvertible {
   public var description: String { value }
 }
 
+extension Source.Name: ExpressibleByStringLiteral {
+  public init(stringLiteral value: StaticString) {
+    self.init(value.withUTF8Buffer { String(decoding: $0, as: UTF8.self) })
+  }
+}
+
 // MARK: - Source.Path
 
 extension Source {
@@ -36,11 +42,20 @@ extension Source.Path: CustomStringConvertible {
   public var description: String { value.description }
 }
 
+extension Source.Path: ExpressibleByStringLiteral {
+  public init(stringLiteral value: StaticString) {
+    self.init(FilePath(value.withUTF8Buffer { String(decoding: $0, as: UTF8.self) }))
+  }
+}
+
 // MARK: - Source.Code
 
 extension Source {
   public struct Code: Equatable, Sendable {
     fileprivate let data: Data
+    public init(data: Data) {
+      self.data = data
+    }
   }
 }
 

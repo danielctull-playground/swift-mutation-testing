@@ -23,6 +23,12 @@ extension Package.Name: CustomStringConvertible {
   public var description: String { value }
 }
 
+extension Package.Name: ExpressibleByStringLiteral {
+  public init(stringLiteral value: StaticString) {
+    self.init(value.withUTF8Buffer { String(decoding: $0, as: UTF8.self) })
+  }
+}
+
 // MARK: - Package.Path
 
 extension Package {
@@ -36,6 +42,12 @@ extension Package {
 
 extension Package.Path: CustomStringConvertible {
   public var description: String { value.description }
+}
+
+extension Package.Path: ExpressibleByStringLiteral {
+  public init(stringLiteral value: StaticString) {
+    self.init(FilePath(value.withUTF8Buffer { String(decoding: $0, as: UTF8.self) }))
+  }
 }
 
 // MARK: - Decodable

@@ -1,6 +1,4 @@
-import Foundation
 import PackageKit
-import System
 import Testing
 
 @Suite("Source")
@@ -10,24 +8,24 @@ struct SourceTests {
   struct Name {
 
     @Test("CustomStringConvertible")
-    func customStringConvertible() async throws {
-      let path = try FilePath.testPackages.appending("DefaultPaths")
-      let package = try await Package(path: path)
+    func customStringConvertible() {
+      let name: Source.Name = "Some name"
+      #expect(name.description == "Some name")
+    }
 
-      #expect(package.targets.flatMap(\.sources).map(\.name.description) == [
-        "Test 1.swift",
-        "Test 2.swift",
-        "Test Group/Test Group 1.swift",
-        "Test Group/Test Group 2.swift",
-        "Library 1.swift",
-        "Library 2.swift",
-        "Library Group/Library Group 1.swift",
-        "Library Group/Library Group 2.swift",
-        "Executable 1.swift",
-        "Executable 2.swift",
-        "Executable Group/Executable Group 1.swift",
-        "Executable Group/Executable Group 2.swift",
-      ])
+    @Test("Equatable")
+    func equatable() {
+      let name1: Source.Name = "Some name"
+      let name2: Source.Name = "Some name"
+      let name3: Source.Name = "Another"
+      #expect(name1 == name2)
+      #expect(name1 != name3)
+    }
+
+    @Test("ExpressibleByStringLiteral")
+    func expressibleByStringLiteral() {
+      let name: Source.Name = "Some name"
+      #expect(name == "Some name")
     }
   }
 
@@ -35,24 +33,24 @@ struct SourceTests {
   struct Path {
 
     @Test("CustomStringConvertible")
-    func customStringConvertible() async throws {
-      let path = try FilePath.testPackages.appending("DefaultPaths")
-      let package = try await Package(path: path)
+    func customStringConvertible() {
+      let path: Source.Path = "The/Path"
+      #expect(path.description == "The/Path")
+    }
 
-      #expect(package.targets.flatMap(\.sources).map(\.path.description) == [
-        path.appending("Tests/Test/Test 1.swift").description,
-        path.appending("Tests/Test/Test 2.swift").description,
-        path.appending("Tests/Test/Test Group/Test Group 1.swift").description,
-        path.appending("Tests/Test/Test Group/Test Group 2.swift").description,
-        path.appending("Sources/Library/Library 1.swift").description,
-        path.appending("Sources/Library/Library 2.swift").description,
-        path.appending("Sources/Library/Library Group/Library Group 1.swift").description,
-        path.appending("Sources/Library/Library Group/Library Group 2.swift").description,
-        path.appending("Sources/Executable/Executable 1.swift").description,
-        path.appending("Sources/Executable/Executable 2.swift").description,
-        path.appending("Sources/Executable/Executable Group/Executable Group 1.swift").description,
-        path.appending("Sources/Executable/Executable Group/Executable Group 2.swift").description,
-      ])
+    @Test("Equatable")
+    func equatable() {
+      let path1: Source.Path = "Some/Path"
+      let path2: Source.Path = "Some/Path"
+      let path3: Source.Path = "Another/Path"
+      #expect(path1 == path2)
+      #expect(path1 != path3)
+    }
+
+    @Test("ExpressibleByStringLiteral")
+    func expressibleByStringLiteral() {
+      let path: Source.Path = "Some/Path"
+      #expect(path == "Some/Path")
     }
   }
 }

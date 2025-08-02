@@ -22,6 +22,12 @@ extension Target.Name: CustomStringConvertible {
   public var description: String { value }
 }
 
+extension Target.Name: ExpressibleByStringLiteral {
+  public init(stringLiteral value: StaticString) {
+    self.init(value.withUTF8Buffer { String(decoding: $0, as: UTF8.self) })
+  }
+}
+
 // MARK: - Target.Kind
 
 extension Target {
