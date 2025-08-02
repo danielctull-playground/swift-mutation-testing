@@ -13,6 +13,21 @@ let package = Package(
   targets: [
 
     .target(
+      name: "CoreMutation",
+      dependencies: [
+        "PackageKit",
+      ],
+    ),
+
+    .testTarget(
+      name: "CoreMutationTests",
+      dependencies: [
+        "CoreMutation",
+        "PackageKit",
+      ],
+    ),
+
+    .target(
       name: "PackageKit",
       dependencies: [
         .product(name: "Subprocess", package: "swift-subprocess"),
