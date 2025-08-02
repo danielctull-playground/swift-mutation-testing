@@ -57,6 +57,9 @@ extension Source.Path: ExpressibleByStringLiteral {
 extension Source {
   public struct Code: Equatable, Sendable {
     fileprivate let data: Data
+    public init(data: Data) {
+      self.data = data
+    }
   }
 }
 

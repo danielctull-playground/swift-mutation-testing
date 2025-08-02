@@ -78,23 +78,22 @@ struct SourceTests {
 
     @Test("CustomStringConvertible")
     func customStringConvertible() {
-      let line: Source.Line = 1
+      let line = Source.Line(1)
       #expect(line.description == "1")
     }
 
     @Test("Equatable")
     func equatable() {
-      let line1: Source.Line = 1
-      let line2: Source.Line = 1
-      let line3: Source.Line = 3
+      let line1 = Source.Line(1)
+      let line2 = Source.Line(1)
+      let line3 = Source.Line(3)
       #expect(line1 == line2)
       #expect(line1 != line3)
     }
 
     @Test("ExpressibleByIntegerLiteral")
     func expressibleByIntegerLiteral() {
-      let line: Source.Line = 1
-      #expect(line == 1)
+      #expect(Source.Line(1) == 1)
     }
   }
 
@@ -103,23 +102,22 @@ struct SourceTests {
 
     @Test("CustomStringConvertible")
     func customStringConvertible() {
-      let column: Source.Column = 1
+      let column = Source.Column(1)
       #expect(column.description == "1")
     }
 
     @Test("Equatable")
     func equatable() {
-      let column1: Source.Column = 1
-      let column2: Source.Column = 1
-      let column3: Source.Column = 3
+      let column1 = Source.Column(1)
+      let column2 = Source.Column(1)
+      let column3 = Source.Column(3)
       #expect(column1 == column2)
       #expect(column1 != column3)
     }
 
     @Test("ExpressibleByIntegerLiteral")
     func expressibleByIntegerLiteral() {
-      let column: Source.Column = 1
-      #expect(column == 1)
+      #expect(Source.Column(1) == 1)
     }
   }
 
@@ -128,23 +126,22 @@ struct SourceTests {
 
     @Test("CustomStringConvertible")
     func customStringConvertible() {
-      let offset: Source.Offset = 1
+      let offset = Source.Offset(1)
       #expect(offset.description == "1")
     }
 
     @Test("Equatable")
     func equatable() {
-      let offset1: Source.Offset = 1
-      let offset2: Source.Offset = 1
-      let offset3: Source.Offset = 3
+      let offset1 = Source.Offset(1)
+      let offset2 = Source.Offset(1)
+      let offset3 = Source.Offset(3)
       #expect(offset1 == offset2)
       #expect(offset1 != offset3)
     }
 
     @Test("ExpressibleByIntegerLiteral")
     func expressibleByIntegerLiteral() {
-      let offset: Source.Offset = 1
-      #expect(offset == 1)
+      #expect(Source.Offset(1) == 1)
     }
   }
 }

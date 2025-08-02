@@ -38,7 +38,7 @@ extension Source {
 extension Source {
   public struct Line: Equatable, Sendable {
     private let value: Int
-    init(_ value: Int) {
+    public init(_ value: Int) {
       self.value = value
     }
   }
@@ -59,7 +59,7 @@ extension Source.Line: ExpressibleByIntegerLiteral {
 extension Source {
   public struct Column: Equatable, Sendable {
     private let value: Int
-    init(_ value: Int) {
+    public init(_ value: Int) {
       self.value = value
     }
   }
@@ -80,7 +80,7 @@ extension Source.Column: ExpressibleByIntegerLiteral {
 extension Source {
   public struct Offset: Equatable, Sendable {
     private let value: Int
-    init(_ value: Int) {
+    public init(_ value: Int) {
       self.value = value
     }
   }

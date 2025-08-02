@@ -9,6 +9,7 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/swiftlang/swift-subprocess.git", branch: "main"),
+    .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "601.0.0"),
   ],
   targets: [
 
@@ -24,6 +25,34 @@ let package = Package(
       dependencies: [
         "CoreMutation",
         "PackageKit",
+      ],
+    ),
+
+    .target(
+      name: "SyntaxMutation",
+      dependencies: [
+        "CoreMutation",
+        "PackageKit",
+        .product(name: "SwiftParser", package: "swift-syntax"),
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+      ],
+    ),
+
+    .target(
+      name: "MutationKit",
+      dependencies: [
+        "CoreMutation",
+        "PackageKit",
+        "SyntaxMutation",
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+      ],
+    ),
+
+    .testTarget(
+      name: "MutationKitTests",
+      dependencies: [
+        "MutationKit",
+        
       ],
     ),
 
