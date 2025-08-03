@@ -33,6 +33,7 @@ extension Mutation {
           replacement: $0.mutate()
         )
       }
+      .drop { $0.replacement == file.code }
       .uniqued(on: \.replacement)
 
     return Array(mutants)

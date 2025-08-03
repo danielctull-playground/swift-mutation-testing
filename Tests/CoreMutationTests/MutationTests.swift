@@ -16,8 +16,8 @@ struct MutationTests {
       #expect(mutants.isEmpty)
     }
 
-    @Test("no change")
-    func noChange() throws {
+    @Test("change")
+    func change() throws {
 
       let mutation = Mutation(name: "test") { file in
         [Mutation.Change(start: .start, end: .end) { "replacement" }]
@@ -33,6 +33,18 @@ struct MutationTests {
       #expect(mutants[0].location.end == .end)
       #expect(mutants[0].original == "original")
       #expect(mutants[0].replacement == "replacement")
+    }
+
+    @Test("no changes")
+    func noChanges() throws {
+
+      let mutation = Mutation(name: "test") { file in
+        [Mutation.Change(start: .start, end: .end) { file.code }]
+      }
+
+      let file = Source.File(name: "name", path: "path", code: "original")
+      let mutants = mutation.mutants(for: file)
+      #expect(mutants.isEmpty)
     }
   }
 

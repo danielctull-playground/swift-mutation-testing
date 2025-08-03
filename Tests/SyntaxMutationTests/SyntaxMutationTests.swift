@@ -70,4 +70,24 @@ struct SyntaxMutationTests {
       let name = "Daniel"
       """)
   }
+
+  @Test("non changes are not counted")
+  func nonChanges() {
+
+    final class Visitor: MutationVisitor {
+
+      override func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
+        record(before: node, after: node)
+        return super.visit(node)
+      }
+    }
+
+    let mutation = Mutation(name: "Replace File", visitor: Visitor.self)
+    let file = Source.File(name: "name", path: "path", code: """
+      let name = "Daniel"
+      """)
+
+    let mutants = mutation.mutants(for: file)
+    #expect(mutants.isEmpty)
+  }
 }
