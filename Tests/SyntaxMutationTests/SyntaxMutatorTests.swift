@@ -14,7 +14,7 @@ struct SyntaxMutatorTests {
     final class Visitor: MutationVisitor {
 
       override func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
-        mutate(before: node, after: ExprSyntax("""
+        mutate(from: node, to: ExprSyntax("""
           let name = "Daniel"
           """))
         return super.visit(node)
@@ -44,10 +44,10 @@ struct SyntaxMutatorTests {
     final class Visitor: MutationVisitor {
 
       override func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
-        mutate(before: node, after: ExprSyntax("""
+        mutate(from: node, to: ExprSyntax("""
           let name = "Daniel"
           """))
-        mutate(before: node, after: ExprSyntax("""
+        mutate(from: node, to: ExprSyntax("""
           let name = "Daniel"
           """))
         return super.visit(node)
@@ -77,7 +77,7 @@ struct SyntaxMutatorTests {
     final class Visitor: MutationVisitor {
 
       override func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
-        mutate(before: node, after: node)
+        mutate(from: node, to: node)
         return super.visit(node)
       }
     }

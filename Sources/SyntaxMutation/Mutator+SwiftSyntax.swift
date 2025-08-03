@@ -35,8 +35,8 @@ public struct Mutate {
   fileprivate let discover: (Mutator.Change) -> Void
 
   public func callAsFunction<Before: SyntaxProtocol, After: SyntaxProtocol>(
-    before: Before,
-    after: After
+    from before: Before,
+    to after: After
   ) {
 
     let converter = SourceLocationConverter(fileName: path.description, tree: syntax)

@@ -22,7 +22,7 @@ final private class ReverseString: MutationVisitor {
       case .stringSegment(let before):
         let new = String(before.content.text.reversed())
         let after = StringSegmentSyntax(content: .stringSegment(new))
-        mutate(before: before, after: after)
+        mutate(from: before, to: after)
       }
     }
 
