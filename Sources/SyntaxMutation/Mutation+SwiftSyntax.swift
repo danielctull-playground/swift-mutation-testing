@@ -71,23 +71,6 @@ private final class Rewriter<
   }
 }
 
-extension Source.Location {
-  fileprivate init(
-    name: Source.Name,
-    path: Source.Path,
-    code: SourceFileSyntax,
-    node: some SyntaxProtocol
-  ) {
-    let converter = SourceLocationConverter(fileName: path.description, tree: code)
-    self.init(
-      name: name,
-      path: path,
-      start: Source.Position(node.startLocation(converter: converter)),
-      end: Source.Position(node.endLocation(converter: converter)),
-    )
-  }
-}
-
 extension Source.Position {
   fileprivate init(_ location: SourceLocation) {
     self.init(
