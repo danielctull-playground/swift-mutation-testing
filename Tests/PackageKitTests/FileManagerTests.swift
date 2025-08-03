@@ -1,5 +1,5 @@
 import Foundation
-import PackageKit
+@testable import PackageKit
 import System
 import Testing
 
@@ -27,10 +27,8 @@ struct FileManagerTests {
 
   @Test("file(for:) [not found]")
   func file_notFound() async throws {
-    let path = try FilePath.testPackages.appending("NotFound")
-    let source = Source(name: "Name", path: path)
-
-    #expect(throws: Source.File.NotFound(path: path)) {
+    let source = Source(name: "Name", path: "Not Found")
+    #expect(throws: Source.File.NotFound(path: source.path)) {
       try FileManager.default.file(for: source)
     }
   }
