@@ -1,5 +1,5 @@
 import CoreMutation
-import PackageKit
+@testable import PackageKit
 import Testing
 
 @Suite("Mutation")
@@ -10,17 +10,21 @@ struct MutationTests {
 
     @Test("empty")
     func empty() {
-      let mutation = Mutation(name: "test") { _, _ in [] }
-      let mutants = mutation.mutants(for: "", in: Source(name: "name", path: "path"))
+      let mutation = Mutation(name: "test") { _ in [] }
+      let file = Source.File(name: "name", path: "path", code: "original")
+      let mutants = mutation.mutants(for: file)
       #expect(mutants.isEmpty)
     }
 
     @Test("no change")
     func noChange() throws {
-      let mutation = Mutation(name: "test") { source, code in
+
+      let mutation = Mutation(name: "test") { file in
         [Mutation.Change(start: .start, end: .end) { "replacement" }]
       }
-      let mutants = mutation.mutants(for: "original", in: Source(name: "name", path: "path"))
+
+      let file = Source.File(name: "name", path: "path", code: "original")
+      let mutants = mutation.mutants(for: file)
       try #require(mutants.count == 1)
       #expect(mutants[0].mutation == "test")
       #expect(mutants[0].location.name == "name")

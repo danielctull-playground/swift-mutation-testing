@@ -17,10 +17,10 @@ open class MutationVisitor: SyntaxVisitor {
 extension Mutation {
 
   public init<Visitor: MutationVisitor>(name: Name, visitor: Visitor.Type) {
-    self.init(name: name) { source, code in
-      let syntax = Parser.parse(source: code.description)
+    self.init(name: name) { file in
+      let syntax = Parser.parse(source: file.code.description)
       var changes: [Change] = []
-      let record = Record(source: source, syntax: syntax) { changes.append($0) }
+      let record = Record(path: file.path, syntax: syntax) { changes.append($0) }
       let visitor = Visitor(record: record)
       visitor.walk(syntax)
       return changes
@@ -30,7 +30,7 @@ extension Mutation {
 
 public struct Record {
 
-  fileprivate let source: Source
+  fileprivate let path: Source.Path
   fileprivate let syntax: SourceFileSyntax
   fileprivate let discover: (Mutation.Change) -> Void
 
@@ -39,7 +39,7 @@ public struct Record {
     after: After
   ) {
 
-    let converter = SourceLocationConverter(fileName: source.path.description, tree: syntax)
+    let converter = SourceLocationConverter(fileName: path.description, tree: syntax)
     let start = Source.Position(before.startLocation(converter: converter))
     let end = Source.Position(before.endLocation(converter: converter))
     let change = Mutation.Change(start: start, end: end) {

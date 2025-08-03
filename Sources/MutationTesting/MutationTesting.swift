@@ -18,9 +18,9 @@ struct MutationTesting: AsyncParsableCommand {
     let targets = package.targets.filter { $0.kind != .test }
     let mutants = try targets.flatMap { target in
       try target.sources.flatMap { source in
-        let code = try fileManager.code(for: source.path)
+        let file = try fileManager.file(for: source)
         return mutations.flatMap { mutation in
-          mutation.mutants(for: code, in: source)
+          mutation.mutants(for: file)
         }
       }
     }

@@ -3,11 +3,11 @@ import PackageKit
 public struct Mutation: Sendable {
 
   public let name: Name
-  private let changes: @Sendable (Source, Source.Code) -> [Change]
+  private let changes: @Sendable (Source.File) -> [Change]
 
   public init(
     name: Name,
-    changes: @escaping @Sendable (Source, Source.Code) -> [Change]
+    changes: @escaping @Sendable (Source.File) -> [Change]
   ) {
     self.name = name
     self.changes = changes
@@ -16,17 +16,17 @@ public struct Mutation: Sendable {
 
 extension Mutation {
 
-  public func mutants(for code: Source.Code, in source: Source) -> [Mutant] {
-    changes(source, code).map {
+  public func mutants(for file: Source.File) -> [Mutant] {
+    changes(file).map {
       Mutant(
         mutation: name,
         location: Source.Location(
-          name: source.name,
-          path: source.path,
+          name: file.name,
+          path: file.path,
           start: $0.start,
           end: $0.end,
         ),
-        original: code,
+        original: file.code,
         mutate: $0.mutate
       )
     }

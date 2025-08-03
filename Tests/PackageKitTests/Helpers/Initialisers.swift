@@ -19,7 +19,7 @@ extension Source {
   }
 }
 
-extension Source.Code.NotFound {
+extension Source.File.NotFound {
   init(path: FilePath) {
     self.init(path: Source.Path(path))
   }

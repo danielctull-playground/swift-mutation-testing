@@ -67,26 +67,39 @@ extension Source.Code: CustomStringConvertible {
   public var description: String { String(decoding: data, as: UTF8.self) }
 }
 
-extension Source.Code {
-  public struct NotFound: Error, Equatable {
-    public let path: Source.Path
-  }
-}
-
 extension Source.Code: ExpressibleByStringLiteral {
   public init(stringLiteral value: StaticString) {
     self.init(data: Data(value.withUTF8Buffer { String(decoding: $0, as: UTF8.self) }.utf8))
   }
 }
 
+// MARK: - Source.File
+
+extension Source {
+  public struct File {
+    public let name: Name
+    public let path: Path
+    public let code: Code
+  }
+}
+
+extension Source.File {
+  public struct NotFound: Error, Equatable {
+    public let path: Source.Path
+  }
+}
+
 extension FileManager {
 
-  public func code(for path: Source.Path) throws -> Source.Code {
+  public func file(for source: Source) throws -> Source.File {
 
-    guard let data = contents(atPath: path.value.string) else {
-      throw Source.Code.NotFound(path: path)
+    guard let data = contents(atPath: source.path.value.string) else {
+      throw Source.File.NotFound(path: source.path)
     }
 
-    return Source.Code(data: data)
+    return Source.File(
+      name: source.name,
+      path: source.path,
+      code: Source.Code(data: data))
   }
 }
