@@ -14,7 +14,7 @@ open class MutationVisitor: SyntaxVisitor {
   }
 }
 
-extension Mutation {
+extension Mutator {
 
   public init<Visitor: MutationVisitor>(name: Name, visitor: Visitor.Type) {
     self.init(name: name) { file in
@@ -32,7 +32,7 @@ public struct Record {
 
   fileprivate let path: Source.Path
   fileprivate let syntax: SourceFileSyntax
-  fileprivate let discover: (Mutation.Change) -> Void
+  fileprivate let discover: (Mutator.Change) -> Void
 
   public func callAsFunction<Before: SyntaxProtocol, After: SyntaxProtocol>(
     before: Before,
@@ -42,7 +42,7 @@ public struct Record {
     let converter = SourceLocationConverter(fileName: path.description, tree: syntax)
     let start = Source.Position(before.startLocation(converter: converter))
     let end = Source.Position(before.endLocation(converter: converter))
-    let change = Mutation.Change(start: start, end: end) {
+    let change = Mutator.Change(start: start, end: end) {
       let rewriter = Rewriter(before: before, after: after)
       return Source.Code(rewriter.visit(syntax))
     }

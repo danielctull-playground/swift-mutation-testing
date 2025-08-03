@@ -1,7 +1,7 @@
 import Algorithms
 import PackageKit
 
-public struct Mutation: Sendable {
+public struct Mutator: Sendable {
 
   public let name: Name
   private let changes: @Sendable (Source.File) -> [Change]
@@ -15,14 +15,14 @@ public struct Mutation: Sendable {
   }
 }
 
-extension Mutation {
+extension Mutator {
 
   public func mutants(for file: Source.File) -> [Mutant] {
 
     let mutants = changes(file)
       .map {
         Mutant(
-          mutation: name,
+          mutator: name,
           location: Source.Location(
             name: file.name,
             path: file.path,
@@ -40,27 +40,27 @@ extension Mutation {
   }
 }
 
-// MARK: - Mutation.Name
+// MARK: - Mutator.Name
 
-extension Mutation {
+extension Mutator {
   public struct Name: Equatable, Sendable {
     fileprivate let value: String
   }
 }
 
-extension Mutation.Name: ExpressibleByStringLiteral {
+extension Mutator.Name: ExpressibleByStringLiteral {
   public init(stringLiteral value: StaticString) {
     self.init(value: value.withUTF8Buffer { String(decoding: $0, as: UTF8.self) })
   }
 }
 
-extension Mutation.Name: CustomStringConvertible {
+extension Mutator.Name: CustomStringConvertible {
   public var description: String { value }
 }
 
-// MARK: - Mutation.Change
+// MARK: - Mutator.Change
 
-extension Mutation {
+extension Mutator {
 
   public struct Change {
 

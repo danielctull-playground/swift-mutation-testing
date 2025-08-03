@@ -18,19 +18,19 @@ struct MutationTesting: AsyncParsableCommand {
     let path = Package.Path(FilePath(Process().currentDirectoryURL!.path()))
     let package = try await Package(path: path)
     let fileManager = FileManager()
-    let mutations = Mutation.all
+    let mutators = Mutator.all
 
     let targets = package.targets.filter { $0.kind != .test }
     let mutants = try targets.flatMap { target in
       try target.sources.flatMap { source in
         let file = try fileManager.file(for: source)
-        return mutations.flatMap { mutation in
-          mutation.mutants(for: file)
+        return mutators.flatMap { mutator in
+          mutator.mutants(for: file)
         }
       }
     }
 
-    let mutationLength = (mutants.map(\.mutation.description.count) + ["Mutation".count]).max()!
+    let mutatorLength = (mutants.map(\.mutator.description.count) + ["Mutator".count]).max()!
     let nameLength = (mutants.map(\.location.name.description.count) + ["File Name".count]).max()!
     let lineLength = (mutants.map(\.location.start.line.description.count) + ["Line".count]).max()!
     let columnLength = (mutants.map(\.location.start.column.description.count) + ["Column".count]).max()!
@@ -38,8 +38,8 @@ struct MutationTesting: AsyncParsableCommand {
     print("")
 
     print(
-      "Mutation"
-      + String(repeating: " ", count: mutationLength - "Mutation".count)
+      "Mutator"
+      + String(repeating: " ", count: mutatorLength - "Mutator".count)
       + " | "
       + "File Name"
       + String(repeating: " ", count: nameLength - "File Name".count)
@@ -51,7 +51,7 @@ struct MutationTesting: AsyncParsableCommand {
     )
 
     print(
-      String(repeating: "-", count: mutationLength)
+      String(repeating: "-", count: mutatorLength)
       + "-+-"
       + String(repeating: "-", count: nameLength)
       + "-+-"
@@ -62,14 +62,14 @@ struct MutationTesting: AsyncParsableCommand {
 
     for mutant in mutants {
 
-      let mutationSpace = String(repeating: " ", count: mutationLength - mutant.mutation.description.count)
+      let mutatorSpace = String(repeating: " ", count: mutatorLength - mutant.mutator.description.count)
       let nameSpace = String(repeating: " ", count: nameLength - mutant.location.name.description.count)
       let lineSpace = String(repeating: " ", count: lineLength - mutant.location.start.line.description.count)
       let columnSpace = String(repeating: " ", count: columnLength - mutant.location.start.column.description.count)
 
       print(
-        mutant.mutation.description
-        + mutationSpace
+        mutant.mutator.description
+        + mutatorSpace
         + " | "
         + mutant.location.name.description
         + nameSpace

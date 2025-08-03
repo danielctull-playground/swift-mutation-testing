@@ -5,8 +5,8 @@ import SwiftSyntaxBuilder
 import SyntaxMutation
 import Testing
 
-@Suite("SwiftSyntax Mutation")
-struct SyntaxMutationTests {
+@Suite("SwiftSyntax Mutator")
+struct SyntaxMutatorTests {
 
   @Test("single")
   func single() throws {
@@ -21,14 +21,14 @@ struct SyntaxMutationTests {
       }
     }
 
-    let mutation = Mutation(name: "Replace File", visitor: Visitor.self)
+    let mutator = Mutator(name: "Replace File", visitor: Visitor.self)
     let file = Source.File(name: "name", path: "path", code: "")
 
-    let mutants = mutation.mutants(for: file)
+    let mutants = mutator.mutants(for: file)
 
     try #require(mutants.count == 1)
     #expect(mutants[0].original == file.code)
-    #expect(mutants[0].mutation == mutation.name)
+    #expect(mutants[0].mutator == mutator.name)
     #expect(mutants[0].location.name == file.name)
     #expect(mutants[0].location.path == file.path)
     #expect(mutants[0].location.start == Source.Position(line: 1, column: 1, offset: 0))
@@ -54,14 +54,14 @@ struct SyntaxMutationTests {
       }
     }
 
-    let mutation = Mutation(name: "Replace File", visitor: Visitor.self)
+    let mutator = Mutator(name: "Replace File", visitor: Visitor.self)
     let file = Source.File(name: "name", path: "path", code: "")
 
-    let mutants = mutation.mutants(for: file)
+    let mutants = mutator.mutants(for: file)
 
     try #require(mutants.count == 1)
     #expect(mutants[0].original == file.code)
-    #expect(mutants[0].mutation == mutation.name)
+    #expect(mutants[0].mutator == mutator.name)
     #expect(mutants[0].location.name == file.name)
     #expect(mutants[0].location.path == file.path)
     #expect(mutants[0].location.start == Source.Position(line: 1, column: 1, offset: 0))
@@ -82,12 +82,12 @@ struct SyntaxMutationTests {
       }
     }
 
-    let mutation = Mutation(name: "Replace File", visitor: Visitor.self)
+    let mutator = Mutator(name: "Replace File", visitor: Visitor.self)
     let file = Source.File(name: "name", path: "path", code: """
       let name = "Daniel"
       """)
 
-    let mutants = mutation.mutants(for: file)
+    let mutants = mutator.mutants(for: file)
     #expect(mutants.isEmpty)
   }
 }

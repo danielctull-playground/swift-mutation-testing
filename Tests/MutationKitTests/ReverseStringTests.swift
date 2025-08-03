@@ -9,7 +9,7 @@ struct ReverseStringTests {
   @Test("empty")
   func empty() {
     let file = Source.File(name: "name", path: "path", code: "")
-    let mutants = Mutation.reverseString.mutants(for: file)
+    let mutants = Mutator.reverseString.mutants(for: file)
     #expect(mutants.isEmpty)
   }
 
@@ -22,7 +22,7 @@ struct ReverseStringTests {
       """
     )
 
-    let mutants = Mutation.reverseString.mutants(for: file)
+    let mutants = Mutator.reverseString.mutants(for: file)
     #expect(mutants.isEmpty)
   }
 
@@ -36,11 +36,11 @@ struct ReverseStringTests {
       """
     )
 
-    let mutants = Mutation.reverseString.mutants(for: file)
+    let mutants = Mutator.reverseString.mutants(for: file)
 
     try #require(mutants.count == 1)
     #expect(mutants[0].original == file.code)
-    #expect(mutants[0].mutation == "Reverse String")
+    #expect(mutants[0].mutator == "Reverse String")
     #expect(mutants[0].location.name == file.name)
     #expect(mutants[0].location.path == file.path)
     #expect(mutants[0].location.start == Source.Position(line: 2, column: 10, offset: 24))
@@ -63,11 +63,11 @@ struct ReverseStringTests {
       var bar: String { "baz" }
       """)
 
-    let mutants = Mutation.reverseString.mutants(for: file)
+    let mutants = Mutator.reverseString.mutants(for: file)
 
     try #require(mutants.count == 2)
     #expect(mutants[0].original == file.code)
-    #expect(mutants[0].mutation == "Reverse String")
+    #expect(mutants[0].mutator == "Reverse String")
     #expect(mutants[0].location.name == file.name)
     #expect(mutants[0].location.path == file.path)
     #expect(mutants[0].location.start == Source.Position(line: 2, column: 10, offset: 22))
@@ -81,7 +81,7 @@ struct ReverseStringTests {
       """)
 
     #expect(mutants[1].original == file.code)
-    #expect(mutants[1].mutation == "Reverse String")
+    #expect(mutants[1].mutator == "Reverse String")
     #expect(mutants[1].location.name == file.name)
     #expect(mutants[1].location.path == file.path)
     #expect(mutants[1].location.start == Source.Position(line: 5, column: 20, offset: 53))
@@ -104,11 +104,11 @@ struct ReverseStringTests {
       }
       """#)
 
-    let mutants = Mutation.reverseString.mutants(for: file)
+    let mutants = Mutator.reverseString.mutants(for: file)
 
     try #require(mutants.count == 2)
     #expect(mutants[0].original == file.code)
-    #expect(mutants[0].mutation == "Reverse String")
+    #expect(mutants[0].mutator == "Reverse String")
     #expect(mutants[0].location.name == file.name)
     #expect(mutants[0].location.path == file.path)
     #expect(mutants[0].location.start == Source.Position(line: 2, column: 10, offset: 36))
@@ -120,7 +120,7 @@ struct ReverseStringTests {
       """#)
 
     #expect(mutants[1].original == file.code)
-    #expect(mutants[1].mutation == "Reverse String")
+    #expect(mutants[1].mutator == "Reverse String")
     #expect(mutants[1].location.name == file.name)
     #expect(mutants[1].location.path == file.path)
     #expect(mutants[1].location.start == Source.Position(line: 2, column: 23, offset: 49))

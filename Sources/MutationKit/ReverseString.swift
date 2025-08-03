@@ -2,9 +2,9 @@ import CoreMutation
 import SwiftSyntax
 import SyntaxMutation
 
-extension Mutation {
+extension Mutator {
 
-  public static let reverseString = Mutation(
+  public static let reverseString = Mutator(
     name: "Reverse String",
     visitor: ReverseString.self,
   )

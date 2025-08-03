@@ -1,8 +1,8 @@
 import CoreMutation
 
-extension Mutation {
+extension Mutator {
 
-  public static var all: [Mutation] {
+  public static var all: [Mutator] {
     [
       .reverseString,
     ]

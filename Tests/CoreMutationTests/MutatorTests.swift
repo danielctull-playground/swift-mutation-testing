@@ -2,31 +2,31 @@ import CoreMutation
 @testable import PackageKit
 import Testing
 
-@Suite("Mutation")
-struct MutationTests {
+@Suite("Mutator")
+struct MutatorTests {
 
   @Suite("mutants(for:)")
   struct MutantsFor {
 
     @Test("empty")
     func empty() {
-      let mutation = Mutation(name: "test") { _ in [] }
+      let mutator = Mutator(name: "test") { _ in [] }
       let file = Source.File(name: "name", path: "path", code: "original")
-      let mutants = mutation.mutants(for: file)
+      let mutants = mutator.mutants(for: file)
       #expect(mutants.isEmpty)
     }
 
     @Test("change")
     func change() throws {
 
-      let mutation = Mutation(name: "test") { file in
-        [Mutation.Change(start: .start, end: .end) { "replacement" }]
+      let mutator = Mutator(name: "test") { file in
+        [Mutator.Change(start: .start, end: .end) { "replacement" }]
       }
 
       let file = Source.File(name: "name", path: "path", code: "original")
-      let mutants = mutation.mutants(for: file)
+      let mutants = mutator.mutants(for: file)
       try #require(mutants.count == 1)
-      #expect(mutants[0].mutation == "test")
+      #expect(mutants[0].mutator == "test")
       #expect(mutants[0].location.name == "name")
       #expect(mutants[0].location.path == "path")
       #expect(mutants[0].location.start == .start)
@@ -38,12 +38,12 @@ struct MutationTests {
     @Test("no changes")
     func noChanges() throws {
 
-      let mutation = Mutation(name: "test") { file in
-        [Mutation.Change(start: .start, end: .end) { file.code }]
+      let mutator = Mutator(name: "test") { file in
+        [Mutator.Change(start: .start, end: .end) { file.code }]
       }
 
       let file = Source.File(name: "name", path: "path", code: "original")
-      let mutants = mutation.mutants(for: file)
+      let mutants = mutator.mutants(for: file)
       #expect(mutants.isEmpty)
     }
   }
@@ -53,22 +53,22 @@ struct MutationTests {
 
     @Test("CustomStringConvertible")
     func customStringConvertible() {
-      let name: Mutation.Name = "Some name"
+      let name: Mutator.Name = "Some name"
       #expect(name.description == "Some name")
     }
 
     @Test("Equatable")
     func equatable() {
-      let name1: Mutation.Name = "Some name"
-      let name2: Mutation.Name = "Some name"
-      let name3: Mutation.Name = "Another"
+      let name1: Mutator.Name = "Some name"
+      let name2: Mutator.Name = "Some name"
+      let name3: Mutator.Name = "Another"
       #expect(name1 == name2)
       #expect(name1 != name3)
     }
 
     @Test("ExpressibleByStringLiteral")
     func expressibleByStringLiteral() {
-      let name: Mutation.Name = "Some name"
+      let name: Mutator.Name = "Some name"
       #expect(name == "Some name")
     }
   }
