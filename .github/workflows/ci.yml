@@ -22,9 +22,9 @@ jobs:
     - name: Swift Version
       run: swift --version
     - name: Build
-      run: swift build -v
+      run: swift build --verbose --configuration debug --enable-experimental-prebuilts
     - name: Test
-      run: swift test -v
+      run: swift test --verbose --configuration debug --enable-experimental-prebuilts
 
 #  macos:
 #    name: macOS
