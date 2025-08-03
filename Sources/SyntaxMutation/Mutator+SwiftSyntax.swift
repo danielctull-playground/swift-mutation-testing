@@ -6,10 +6,10 @@ import SwiftParser
 
 open class MutationVisitor: SyntaxVisitor {
 
-  public let record: Record
+  public let mutate: Mutate
 
-  required public init(record: Record) {
-    self.record = record
+  required public init(mutate: Mutate) {
+    self.mutate = mutate
     super.init(viewMode: .sourceAccurate)
   }
 }
@@ -20,15 +20,15 @@ extension Mutator {
     self.init(name: name) { file in
       let syntax = Parser.parse(source: file.code.description)
       var changes: [Change] = []
-      let record = Record(path: file.path, syntax: syntax) { changes.append($0) }
-      let visitor = Visitor(record: record)
+      let mutate = Mutate(path: file.path, syntax: syntax) { changes.append($0) }
+      let visitor = Visitor(mutate: mutate)
       visitor.walk(syntax)
       return changes
     }
   }
 }
 
-public struct Record {
+public struct Mutate {
 
   fileprivate let path: Source.Path
   fileprivate let syntax: SourceFileSyntax
