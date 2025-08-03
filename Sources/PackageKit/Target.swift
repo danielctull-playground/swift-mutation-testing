@@ -1,4 +1,8 @@
-import System
+#if canImport(System)
+@preconcurrency import System
+#else
+@preconcurrency import SystemPackage
+#endif
 
 public struct Target: Equatable, Hashable {
   public let name: Name

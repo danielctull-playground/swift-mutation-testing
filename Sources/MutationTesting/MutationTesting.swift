@@ -3,7 +3,12 @@ import CoreMutation
 import Foundation
 import MutationKit
 import PackageKit
-import System
+
+#if canImport(System)
+@preconcurrency import System
+#else
+@preconcurrency import SystemPackage
+#endif
 
 @main
 struct MutationTesting: AsyncParsableCommand {

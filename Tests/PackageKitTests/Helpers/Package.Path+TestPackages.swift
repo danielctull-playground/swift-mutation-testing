@@ -1,7 +1,12 @@
 import Foundation
 @testable import PackageKit
-import System
 import Testing
+
+#if canImport(System)
+@preconcurrency import System
+#else
+@preconcurrency import SystemPackage
+#endif
 
 extension Package.Path {
 

@@ -13,6 +13,7 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.0"),
     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.6.0"),
+    .package(url: "https://github.com/apple/swift-system.git", from: "1.5.0"),
     .package(url: "https://github.com/swiftlang/swift-subprocess.git", branch: "main"),
     .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "601.0.0"),
   ],
@@ -25,6 +26,7 @@ let package = Package(
         "MutationKit",
         "PackageKit",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        .product(name: "SystemPackage", package: "swift-system"),
       ]
     ),
 
@@ -86,13 +88,15 @@ let package = Package(
       name: "PackageKit",
       dependencies: [
         .product(name: "Subprocess", package: "swift-subprocess"),
+        .product(name: "SystemPackage", package: "swift-system"),
       ]
     ),
 
     .testTarget(
       name: "PackageKitTests",
       dependencies: [
-        "PackageKit"
+        "PackageKit",
+        .product(name: "SystemPackage", package: "swift-system"),
       ],
       resources: [
         .copy("TestPackages"),

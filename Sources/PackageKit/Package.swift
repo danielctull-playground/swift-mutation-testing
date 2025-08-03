@@ -1,6 +1,11 @@
 import Foundation
 import Subprocess
-import System
+
+#if canImport(System)
+@preconcurrency import System
+#else
+@preconcurrency import SystemPackage
+#endif
 
 public struct Package: Equatable, Hashable {
   public let name: Name
