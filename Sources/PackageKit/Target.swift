@@ -63,3 +63,9 @@ extension Target {
 extension Target.Path: CustomStringConvertible {
   public var description: String { value.description }
 }
+
+extension Target.Path {
+  public static func +(target: Target.Path, source: String) -> Source.Path {
+    Source.Path(target.value.appending(source))
+  }
+}

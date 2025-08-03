@@ -34,7 +34,7 @@ extension Package.Name: ExpressibleByStringLiteral {
 extension Package {
   public struct Path: Equatable, Hashable, Sendable {
     let value: FilePath
-    init(_ value: FilePath) {
+    public init(_ value: FilePath) {
       self.value = value
     }
   }
@@ -50,18 +50,24 @@ extension Package.Path: ExpressibleByStringLiteral {
   }
 }
 
+extension Package.Path {
+  public static func +(package: Package.Path, target: String) -> Target.Path {
+    Target.Path(package.value.appending(target))
+  }
+}
+
 // MARK: - Decodable
 
 extension Package {
 
   struct NotFound: Error {}
 
-  public init(path: FilePath) async throws {
+  public init(path: Path) async throws {
 
     let result = try await run(
       .name("swift"),
       arguments: ["package", "describe", "--type", "json"],
-      workingDirectory: path,
+      workingDirectory: path.value,
       output: .string(limit: .max, encoding: UTF8.self)
     )
 
@@ -70,18 +76,17 @@ extension Package {
 
     self.init(
       name: Name(package.name),
-      path: Path(path),
+      path: path,
       targets: package.targets.map { target in
         let kind = Target.Kind(target.type)
-        let targetPath = path.appending(target.path)
         return Target(
           name: Target.Name(target.name),
           kind: kind,
-          path: Target.Path(targetPath),
+          path: path + target.path,
           sources: target.sources.map { source in
             Source(
               name: Source.Name(source),
-              path: Source.Path(targetPath.appending(source))
+              path: path + target.path + source
             )
           }
         )

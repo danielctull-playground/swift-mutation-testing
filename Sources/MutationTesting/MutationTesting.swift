@@ -10,7 +10,7 @@ struct MutationTesting: AsyncParsableCommand {
 
   func run() async throws {
 
-    let path = FilePath(Process().currentDirectoryURL!.path())
+    let path = Package.Path(FilePath(Process().currentDirectoryURL!.path()))
     let package = try await Package(path: path)
     let fileManager = FileManager()
     let mutations = Mutation.all
