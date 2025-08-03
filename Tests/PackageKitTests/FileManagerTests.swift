@@ -28,7 +28,7 @@ struct FileManagerTests {
   @Test("file(for:) [not found]")
   func file_notFound() async throws {
     let source = Source(name: "Name", path: "Not Found")
-    #expect(throws: Source.File.NotFound(path: source.path)) {
+    #expect(throws: Source.File.NotFound(source: source)) {
       try FileManager.default.file(for: source)
     }
   }

@@ -1,7 +1,7 @@
 import Foundation
 import System
 
-public struct Source: Equatable, Hashable {
+public struct Source: Equatable, Hashable, Sendable {
   public let name: Name
   public let path: Path
   public init(name: Name, path: Path) {
@@ -85,7 +85,7 @@ extension Source {
 
 extension Source.File {
   public struct NotFound: Error, Equatable {
-    public let path: Source.Path
+    public let source: Source
   }
 }
 
@@ -94,7 +94,7 @@ extension FileManager {
   public func file(for source: Source) throws -> Source.File {
 
     guard let data = contents(atPath: source.path.value.string) else {
-      throw Source.File.NotFound(path: source.path)
+      throw Source.File.NotFound(source: source)
     }
 
     return Source.File(
