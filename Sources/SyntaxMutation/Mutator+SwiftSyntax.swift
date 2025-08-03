@@ -32,7 +32,7 @@ public struct Mutate {
 
   fileprivate let path: Source.Path
   fileprivate let syntax: SourceFileSyntax
-  fileprivate let discover: (Mutation) -> Void
+  fileprivate let apply: (Mutation) -> Void
 
   public func callAsFunction<Original: SyntaxProtocol, Replacement: SyntaxProtocol>(
     from original: Original,
@@ -46,7 +46,7 @@ public struct Mutate {
       let rewriter = Rewriter(original: original, replacement: replacement)
       return Source.Code(rewriter.visit(syntax))
     }
-    discover(mutation)
+    apply(mutation)
   }
 }
 
