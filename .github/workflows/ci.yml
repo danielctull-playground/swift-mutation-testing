@@ -12,7 +12,6 @@ jobs:
       fail-fast: false
       matrix:
         swift-version:
-          - "6.0"
           - "6.1"
     runs-on: ubuntu-latest
     container:
