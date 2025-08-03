@@ -4,11 +4,11 @@ import PackageKit
 public struct Mutator: Sendable {
 
   public let name: Name
-  private let changes: @Sendable (Source.File) -> [Change]
+  private let changes: @Sendable (Source.File) -> [Mutation]
 
   public init(
     name: Name,
-    changes: @escaping @Sendable (Source.File) -> [Change]
+    changes: @escaping @Sendable (Source.File) -> [Mutation]
   ) {
     self.name = name
     self.changes = changes
@@ -56,26 +56,4 @@ extension Mutator.Name: ExpressibleByStringLiteral {
 
 extension Mutator.Name: CustomStringConvertible {
   public var description: String { value }
-}
-
-// MARK: - Mutator.Change
-
-extension Mutator {
-
-  public struct Change {
-
-    fileprivate let start: Source.Position
-    fileprivate let end: Source.Position
-    fileprivate let mutate: () -> Source.Code
-
-    public init(
-      start: Source.Position,
-      end: Source.Position,
-      mutate: @escaping () -> Source.Code,
-    ) {
-      self.start = start
-      self.end = end
-      self.mutate = mutate
-    }
-  }
 }

@@ -20,7 +20,7 @@ struct MutatorTests {
     func change() throws {
 
       let mutator = Mutator(name: "test") { file in
-        [Mutator.Change(start: .start, end: .end) { "replacement" }]
+        [Mutation(start: .start, end: .end) { "replacement" }]
       }
 
       let file = Source.File(name: "name", path: "path", code: "original")
@@ -39,7 +39,7 @@ struct MutatorTests {
     func noChanges() throws {
 
       let mutator = Mutator(name: "test") { file in
-        [Mutator.Change(start: .start, end: .end) { file.code }]
+        [Mutation(start: .start, end: .end) { file.code }]
       }
 
       let file = Source.File(name: "name", path: "path", code: "original")

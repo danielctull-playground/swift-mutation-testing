@@ -19,11 +19,11 @@ extension Mutator {
   public init<Visitor: MutationVisitor>(name: Name, visitor: Visitor.Type) {
     self.init(name: name) { file in
       let syntax = Parser.parse(source: file.code.description)
-      var changes: [Change] = []
-      let mutate = Mutate(path: file.path, syntax: syntax) { changes.append($0) }
+      var mutations: [Mutation] = []
+      let mutate = Mutate(path: file.path, syntax: syntax) { mutations.append($0) }
       let visitor = Visitor(mutate: mutate)
       visitor.walk(syntax)
-      return changes
+      return mutations
     }
   }
 }
@@ -32,7 +32,7 @@ public struct Mutate {
 
   fileprivate let path: Source.Path
   fileprivate let syntax: SourceFileSyntax
-  fileprivate let discover: (Mutator.Change) -> Void
+  fileprivate let discover: (Mutation) -> Void
 
   public func callAsFunction<Original: SyntaxProtocol, Replacement: SyntaxProtocol>(
     from original: Original,
@@ -42,11 +42,11 @@ public struct Mutate {
     let converter = SourceLocationConverter(fileName: path.description, tree: syntax)
     let start = Source.Position(original.startLocation(converter: converter))
     let end = Source.Position(original.endLocation(converter: converter))
-    let change = Mutator.Change(start: start, end: end) {
+    let mutation = Mutation(start: start, end: end) {
       let rewriter = Rewriter(original: original, replacement: replacement)
       return Source.Code(rewriter.visit(syntax))
     }
-    discover(change)
+    discover(mutation)
   }
 }
 
