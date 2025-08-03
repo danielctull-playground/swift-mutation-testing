@@ -1,3 +1,4 @@
+import Algorithms
 import PackageKit
 
 public struct Mutation: Sendable {
@@ -17,19 +18,24 @@ public struct Mutation: Sendable {
 extension Mutation {
 
   public func mutants(for file: Source.File) -> [Mutant] {
-    changes(file).map {
-      Mutant(
-        mutation: name,
-        location: Source.Location(
-          name: file.name,
-          path: file.path,
-          start: $0.start,
-          end: $0.end,
-        ),
-        original: file.code,
-        mutate: $0.mutate
-      )
-    }
+
+    let mutants = changes(file)
+      .map {
+        Mutant(
+          mutation: name,
+          location: Source.Location(
+            name: file.name,
+            path: file.path,
+            start: $0.start,
+            end: $0.end,
+          ),
+          original: file.code,
+          replacement: $0.mutate()
+        )
+      }
+      .uniqued(on: \.replacement)
+
+    return Array(mutants)
   }
 }
 
