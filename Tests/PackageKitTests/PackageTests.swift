@@ -62,7 +62,7 @@ struct PackageTests {
     @Test("default paths")
     func defaultPaths() async throws {
 
-      let path = try Package.Path(FilePath.testPackages.appending("DefaultPaths"))
+      let path = try Package.Path(test: "DefaultPaths")
       let package = try await Package(path: path)
 
       #expect(package == Package(name: "default-paths", path: path, targets: [
@@ -129,7 +129,7 @@ struct PackageTests {
     @Test("custom paths")
     func customPaths() async throws {
 
-      let path = try Package.Path(FilePath.testPackages.appending("CustomPaths"))
+      let path = try Package.Path(test: "CustomPaths")
       let package = try await Package(path: path)
 
       #expect(package == Package(name: "custom-paths", path: path, targets: [
@@ -195,7 +195,7 @@ struct PackageTests {
 
     @Test("no package")
     func noPackage() async throws {
-      let path = try Package.Path(FilePath.testPackages.appending("Non-Existent"))
+      let path = try Package.Path(test: "Non-Existent")
       await #expect(throws: Error.self) {
         try await Package(path: path)
       }

@@ -8,7 +8,7 @@ struct FileManagerTests {
 
   @Test("file(for:)")
   func file() async throws {
-    let path = try Package.Path(FilePath.testPackages.appending("DefaultPaths"))
+    let path = try Package.Path(test: "DefaultPaths")
     let package = try await Package(path: path)
 
     let source = try #require(package.targets.first?.sources.first)
