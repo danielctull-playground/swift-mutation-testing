@@ -6,6 +6,13 @@ import Testing
 @Suite("ReverseString")
 struct ReverseStringTests {
 
+  @Test("empty")
+  func empty() {
+    let file = Source.File(name: "name", path: "path", code: "")
+    let mutants = Mutation.reverseString.mutants(for: file)
+    #expect(mutants.isEmpty)
+  }
+
   @Test("none")
   func none() {
 
@@ -19,8 +26,8 @@ struct ReverseStringTests {
     #expect(mutants.isEmpty)
   }
 
-  @Test("mutation")
-  func mutation() throws {
+  @Test("single")
+  func single() throws {
 
     let file = Source.File(name: "name", path: "path", code: """
       func hello() {
@@ -44,5 +51,84 @@ struct ReverseStringTests {
       }
       """)
   }
-}
 
+  @Test("multiple")
+  func multiple() throws {
+
+    let file = Source.File(name: "name", path: "path", code: """
+      func foo() {
+        print("hello!")
+      }
+      
+      var bar: String { "baz" }
+      """)
+
+    let mutants = Mutation.reverseString.mutants(for: file)
+
+    try #require(mutants.count == 2)
+    #expect(mutants[0].original == file.code)
+    #expect(mutants[0].mutation == "Reverse String")
+    #expect(mutants[0].location.name == file.name)
+    #expect(mutants[0].location.path == file.path)
+    #expect(mutants[0].location.start == Source.Position(line: 2, column: 10, offset: 22))
+    #expect(mutants[0].location.end == Source.Position(line: 2, column: 16, offset: 28))
+    #expect(mutants[0].replacement == """
+      func foo() {
+        print("!olleh")
+      }
+      
+      var bar: String { "baz" }
+      """)
+
+    #expect(mutants[1].original == file.code)
+    #expect(mutants[1].mutation == "Reverse String")
+    #expect(mutants[1].location.name == file.name)
+    #expect(mutants[1].location.path == file.path)
+    #expect(mutants[1].location.start == Source.Position(line: 5, column: 20, offset: 53))
+    #expect(mutants[1].location.end == Source.Position(line: 5, column: 23, offset: 56))
+    #expect(mutants[1].replacement == """
+      func foo() {
+        print("hello!")
+      }
+      
+      var bar: String { "zab" }
+      """)
+  }
+
+  @Test("interpolated expressions")
+  func interpolatedExpressions() throws {
+
+    let file = Source.File(name: "name", path: "path", code: #"""
+      func hello(name: String) {
+        print("hello \(name) and welcome!")
+      }
+      """#)
+
+    let mutants = Mutation.reverseString.mutants(for: file)
+
+    try #require(mutants.count == 2)
+    #expect(mutants[0].original == file.code)
+    #expect(mutants[0].mutation == "Reverse String")
+    #expect(mutants[0].location.name == file.name)
+    #expect(mutants[0].location.path == file.path)
+    #expect(mutants[0].location.start == Source.Position(line: 2, column: 10, offset: 36))
+    #expect(mutants[0].location.end == Source.Position(line: 2, column: 16, offset: 42))
+    #expect(mutants[0].replacement == #"""
+      func hello(name: String) {
+        print(" olleh\(name) and welcome!")
+      }
+      """#)
+
+    #expect(mutants[1].original == file.code)
+    #expect(mutants[1].mutation == "Reverse String")
+    #expect(mutants[1].location.name == file.name)
+    #expect(mutants[1].location.path == file.path)
+    #expect(mutants[1].location.start == Source.Position(line: 2, column: 23, offset: 49))
+    #expect(mutants[1].location.end == Source.Position(line: 2, column: 36, offset: 62))
+    #expect(mutants[1].replacement == #"""
+      func hello(name: String) {
+        print("hello \(name)!emoclew dna ")
+      }
+      """#)
+  }
+}
