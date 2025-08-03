@@ -25,7 +25,7 @@ let package = Package(
         "MutationKit",
         "PackageKit",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
-      ],
+      ]
     ),
 
     .target(
@@ -33,7 +33,7 @@ let package = Package(
       dependencies: [
         "PackageKit",
         .product(name: "Algorithms", package: "swift-algorithms"),
-      ],
+      ]
     ),
 
     .testTarget(
@@ -41,7 +41,7 @@ let package = Package(
       dependencies: [
         "CoreMutation",
         "PackageKit",
-      ],
+      ]
     ),
 
     .target(
@@ -51,7 +51,7 @@ let package = Package(
         "PackageKit",
         .product(name: "SwiftParser", package: "swift-syntax"),
         .product(name: "SwiftSyntax", package: "swift-syntax"),
-      ],
+      ]
     ),
 
     .testTarget(
@@ -62,7 +62,7 @@ let package = Package(
         "SyntaxMutation",
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
-      ],
+      ]
     ),
 
     .target(
@@ -72,21 +72,21 @@ let package = Package(
         "PackageKit",
         "SyntaxMutation",
         .product(name: "SwiftSyntax", package: "swift-syntax"),
-      ],
+      ]
     ),
 
     .testTarget(
       name: "MutationKitTests",
       dependencies: [
         "MutationKit",
-      ],
+      ]
     ),
 
     .target(
       name: "PackageKit",
       dependencies: [
         .product(name: "Subprocess", package: "swift-subprocess"),
-      ],
+      ]
     ),
 
     .testTarget(
@@ -96,7 +96,7 @@ let package = Package(
       ],
       resources: [
         .copy("TestPackages"),
-      ],
+      ]
     ),
   ]
 )
