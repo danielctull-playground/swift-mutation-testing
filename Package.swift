@@ -52,6 +52,16 @@ let package = Package(
       ],
     ),
 
+    .testTarget(
+      name: "SyntaxMutationTests",
+      dependencies: [
+        "CoreMutation",
+        "PackageKit",
+        "SyntaxMutation",
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+      ],
+    ),
+
     .target(
       name: "MutationKit",
       dependencies: [
@@ -66,7 +76,6 @@ let package = Package(
       name: "MutationKitTests",
       dependencies: [
         "MutationKit",
-        
       ],
     ),
 
