@@ -34,16 +34,16 @@ public struct Mutate {
   fileprivate let syntax: SourceFileSyntax
   fileprivate let discover: (Mutator.Change) -> Void
 
-  public func callAsFunction<Before: SyntaxProtocol, After: SyntaxProtocol>(
-    from before: Before,
-    to after: After
+  public func callAsFunction<Original: SyntaxProtocol, Replacement: SyntaxProtocol>(
+    from original: Original,
+    to replacement: Replacement
   ) {
 
     let converter = SourceLocationConverter(fileName: path.description, tree: syntax)
-    let start = Source.Position(before.startLocation(converter: converter))
-    let end = Source.Position(before.endLocation(converter: converter))
+    let start = Source.Position(original.startLocation(converter: converter))
+    let end = Source.Position(original.endLocation(converter: converter))
     let change = Mutator.Change(start: start, end: end) {
-      let rewriter = Rewriter(before: before, after: after)
+      let rewriter = Rewriter(original: original, replacement: replacement)
       return Source.Code(rewriter.visit(syntax))
     }
     discover(change)
@@ -51,23 +51,23 @@ public struct Mutate {
 }
 
 private final class Rewriter<
-  Before: SyntaxProtocol,
-  After: SyntaxProtocol
+  Original: SyntaxProtocol,
+  Replacement: SyntaxProtocol
 >: SyntaxRewriter {
 
-  let before: Before
-  let after: After
+  let original: Original
+  let replacement: Replacement
 
-  init(before: Before, after: After) {
-    self.before = before
-    self.after = after
+  init(original: Original, replacement: Replacement) {
+    self.original = original
+    self.replacement = replacement
   }
 
   override func visitAny(_ node: Syntax) -> Syntax? {
-    guard node == Syntax(before) else {
+    guard node == Syntax(original) else {
       return super.visitAny(node)
     }
-    return Syntax(after)
+    return Syntax(replacement)
   }
 }
 
