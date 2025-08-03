@@ -59,6 +59,7 @@ let package = Package(
         "PackageKit",
         "SyntaxMutation",
         .product(name: "SwiftSyntax", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
       ],
     ),
 
