@@ -1,5 +1,5 @@
 import Foundation
-import PackageKit
+@testable import PackageKit
 import System
 import Testing
 
@@ -65,7 +65,7 @@ struct PackageTests {
       let path = try FilePath.testPackages.appending("DefaultPaths")
       let package = try await Package(path: path)
 
-      #expect(package == Package(name: "default-paths", path: path, targets: [
+      #expect(package == Package(name: "default-paths", path: Package.Path(path), targets: [
 
         Target(name: "Test", kind: .test, path: path.appending("Tests").appending("Test"), sources: [
           Source(
@@ -132,7 +132,7 @@ struct PackageTests {
       let path = try FilePath.testPackages.appending("CustomPaths")
       let package = try await Package(path: path)
 
-      #expect(package == Package(name: "custom-paths", path: path, targets: [
+      #expect(package == Package(name: "custom-paths", path: Package.Path(path), targets: [
 
         Target(name: "Test", kind: .test, path: path.appending("Test"), sources: [
           Source(
